@@ -38,6 +38,32 @@
     <link href="css/tempestuous.css" rel="alternate stylesheet" type="text/css" title="tempestuous">
     <link href="css/violent.css" rel="alternate stylesheet" type="text/css" title="violent">
 
+    <script>
+        var serviceWorkerRegistration;
+        
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+                navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then(res => {        
+                    console.log("service worker registered", res);      
+                    serviceWorkerRegistration = res;
+                })
+                .catch(err => console.log("service worker not registered", err))
+            })
+        }
+        
+        var rebootServiceWorker = () => {
+            if (navigator.onLine) {
+                serviceWorkerRegistration.unregister();
+                localStorage.clear();
+                window.location.reload();
+            } else {
+                cli.write('Client is not online!');
+            }
+        }
+    </script>
+
     <!--[if lt IE 9]>
     <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <![endif]-->
